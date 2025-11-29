@@ -8,6 +8,9 @@ Parser needed to implement FAME-ML
 import ast 
 import os 
 import constants 
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def checkLoggingPerData(tree_object, name2track):
@@ -77,10 +80,14 @@ def checkAttribFuncsInExcept(expr_obj):
                 attrib_list = attrib_list + commonAttribCallBody( func_node )
     return attrib_list 
 
+# Adds logging for syntax errors and returns the AST 
 def getPythonParseObject( pyFile ): 
+	logger.info("getPythonParseObject called; parsing file=%s", pyFile)
 	try:
-		full_tree = ast.parse( open( pyFile ).read())    
-	except SyntaxError:
+		full_tree = ast.parse( open( pyFile ).read())   
+		logger.info("Successfully parsed file=%s", pyFile) 
+	except SyntaxError as err_ :
+		logger.warning("SyntaxError encountered while parsing file=%s: %s", pyFile, err_)
 		# print(constants.PARSING_ERROR_KW, pyFile )
 		full_tree = ast.parse(constants.EMPTY_STRING) 
 	return full_tree 

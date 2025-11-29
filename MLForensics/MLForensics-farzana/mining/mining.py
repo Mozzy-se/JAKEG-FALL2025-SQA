@@ -9,10 +9,15 @@ import shutil
 from git import Repo
 from git import exc 
 
+# Logging setup for forensics
+import logging
+logger = logging.getLogger(__name__)
 
+# Added logging for timestamp
 def giveTimeStamp():
   tsObj = time.time()
   strToret = datetime.fromtimestamp(tsObj).strftime('%Y-%m-%d %H:%M:%S')
+  logger.info("giveTimeStamp called; returning timestamp=%s", strToret)
   return strToret
   
 
@@ -24,15 +29,24 @@ def deleteRepo(dirName, type_):
     except OSError:
         print('Failed deleting, will try manually')  
         
-        
+# Added logging for file dump     
 def dumpContentIntoFile(strP, fileP):
+    logger.info("dumpContentIntoFile called; writing to file=%s", fileP)
     fileToWrite = open( fileP, 'w')
-    fileToWrite.write(strP )
+    fileToWrite.write(strP)
     fileToWrite.close()
-    return str(os.stat(fileP).st_size)
+    size = os.stat(fileP).st_size
+    logger.info("dumpContentIntoFile completed; file size=%d bytes", size)
+    return str(size)
   
-  
+# Added logging for chunking  
 def makeChunks(the_list, size_):
+    logger.info("makeChunks called; list length=%d, chunk size=%r", len(the_list), size_)
+
+    if size_ == 0:
+        logger.error("makeChunks error: chunk size cannot be zero")
+        raise ValueError("Chunk size cannot be zero")
+
     for i in range(0, len(the_list), size_):
         yield the_list[i:i+size_]
         
@@ -64,11 +78,14 @@ def checkPythonFile(path2dir):
                                 print('item_->->->',  content_)                    
     return usageCount  
     
-
+# Added logging for date difference calculation
 def days_between(d1_, d2_): ## pass in date time objects, if string see commented code 
     # d1_ = datetime.strptime(d1_, "%Y-%m-%d")
     # d2_ = datetime.strptime(d2_, "%Y-%m-%d")
-    return abs((d2_ - d1_).days)
+    logger.info("days_between called; d1=%s, d2=%s", d1_, d2_)
+    result = abs((d2_ - d1_).days)
+    logger.info("days_between result: %d days", result)
+    return result
     
     
 def getDevEmailForCommit(repo_path_param, hash_):
