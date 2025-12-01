@@ -6,14 +6,12 @@ import traceback
 from datetime import datetime, timedelta
 import logging
 
-# Path setup
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Directories for MLForensics modules
 MINING_DIR = os.path.join(ROOT_DIR, "MLForensics", "MLForensics-farzana", "mining")
 FAME_ML_DIR = os.path.join(ROOT_DIR, "MLForensics", "MLForensics-farzana", "FAME-ML")
 
-# Add module paths to sys.path
 sys.path.append(MINING_DIR)
 sys.path.append(FAME_ML_DIR)
 
