@@ -78,7 +78,7 @@ def fuzz_function(name: str, call_fn, iterations: int = 200) -> None:
     print(f"[FUZZ] Done fuzzing {name}. Total crashes: {bug_count}")
     print("-" * 60)
 
-# Fuzzes mining.giveTimeStamp which has no parameters
+# Fuzzes giveTimeStamp which has no parameters
 def fuzz_giveTimeStamp() -> None:
     def call():
         _ = mining.giveTimeStamp()
